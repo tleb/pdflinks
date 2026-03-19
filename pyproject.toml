@@ -3,7 +3,7 @@ name = "pdflinks"
 version = "0.1.1"
 description = "Check stalled links inside PDFs"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.10"
 dependencies = [
     "pycryptodome>=3.23.0",
     "pypdf2>=3.0.1",
