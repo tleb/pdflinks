@@ -15,6 +15,14 @@ full-audio-slides.pdf: 5s timeout: https://www.bluez.org/
 full-audio-slides.pdf: skipped 'http' request: http://www.dest-unreach.org/socat/
 full-audio-slides.pdf: 404 HTTP code: https://elixir.bootlin.com/linux/latest/source/sound/soc/samsung/neo1973_wm8753.c
 full-audio-slides.pdf: 404 HTTP code: https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/sound/atmel-wm8904.txt
+
+⟩ # only do link extraction:
+⟩ uvx pdflinks -l full-audio-slides.pdf | wc -l
+131
+
+⟩ # warn on redirect:
+⟩ uvx pdflinks --warn-on-redirects full-audio-slides.pdf | wc -l
+91
 ```
 
 ## How it works
