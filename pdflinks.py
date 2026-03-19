@@ -89,6 +89,8 @@ def request_domain_urls(domain_urls):
             except IOError:
                 log(f"{TIMEOUT_SECS}s timeout: {url}", url)
             else:
+                # TODO: if we get a 403 we could retry with a different User-Agent. Example:
+                # https://wiki.linuxfoundation.org/civilinfrastructureplatform/start
                 code = response.status_code
                 if code < 200 or code >= 300:
                     log(f"{code} HTTP code: {url}", url)
