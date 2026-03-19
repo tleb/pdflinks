@@ -10,6 +10,8 @@ dependencies = [
     "requests>=2.32.5",
     "tqdm>=4.67.3",
 ]
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
 
 [tool.uv]
 package = true
