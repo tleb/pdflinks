@@ -80,7 +80,7 @@ def request_domain_urls(domain_urls):
         if scheme == "mailto":
             pass  # skip silently
         elif scheme != "https":
-            log(f"unexpected scheme '{scheme}', skipping request: {url}", url)
+            log(f"skipped '{scheme}' request: {url}", url)
         else:
             try:
                 response = requests.get(
