@@ -119,10 +119,6 @@ def main():
             for url in pdf_urls:
                 url_to_pdf_mapping[url] += [pdf_path]
 
-    if args.only_list_urls:
-        print("\n".join(sorted(url_to_pdf_mapping.keys())))
-        return
-
     # We group URLs by domain. That way each pool worker is responsible for a full domain
     # and doesn't hammer the server. We sort domains by number of URLs so that domains
     # with many requests start ASAP.
@@ -131,6 +127,11 @@ def main():
         urls_grouped_by_domain[urllib.parse.urlparse(url).netloc].add(url)
     urls_grouped_by_domain = urls_grouped_by_domain.values()
     urls_grouped_by_domain = sorted(urls_grouped_by_domain, key=len, reverse=True)
+
+    if args.only_list_urls:
+        for urls in urls_grouped_by_domain:
+            print("\n".join(sorted(urls)))
+        return
 
     # Sadly we cannot use tqdm as it should be, by wrapping an iterator. That is because
     # our pool does one job per domain and not per URL. We need to .update() manually
