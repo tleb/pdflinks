@@ -2,7 +2,6 @@ import argparse
 import collections
 import multiprocessing.pool
 import urllib.parse
-from itertools import groupby
 
 import PyPDF2
 import requests
@@ -127,13 +126,11 @@ def main():
     # We group URLs by domain. That way each pool worker is responsible for a full domain
     # and doesn't hammer the server. We sort domains by number of URLs so that domains
     # with many requests start ASAP.
-    def url_domain(url):
-        return urllib.parse.urlparse(url).netloc
-
-    urls_grouped_by_domain = [
-        list(u) for _, u in groupby(url_to_pdf_mapping.keys(), key=url_domain)
-    ]
-    urls_grouped_by_domain.sort(key=len, reverse=True)
+    urls_grouped_by_domain = collections.defaultdict(set)
+    for url in url_to_pdf_mapping:
+        urls_grouped_by_domain[urllib.parse.urlparse(url).netloc].add(url)
+    urls_grouped_by_domain = urls_grouped_by_domain.values()
+    urls_grouped_by_domain = sorted(urls_grouped_by_domain, key=len, reverse=True)
 
     # Sadly we cannot use tqdm as it should be, by wrapping an iterator. That is because
     # our pool does one job per domain and not per URL. We need to .update() manually
