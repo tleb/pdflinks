@@ -58,7 +58,7 @@ def extract_urls_from_pdf(pdf_path):
                         urls.add(uri)
 
     # Drop URL #fragments
-    urls = set(urllib.parse.urlparse(u)._replace(fragment="").geturl() for u in urls)
+    urls = (urllib.parse.urlparse(u)._replace(fragment="").geturl() for u in urls)
     # Strip whitespace
     urls = set(u.strip() for u in urls)
     return pdf_path, urls
@@ -112,7 +112,7 @@ def main():
 
     # Extract unique URLs from the PDF
     # urls is a mapping from URLs to PDF files from which they are extracted
-    url_to_pdf_mapping = collections.defaultdict(lambda: [])
+    url_to_pdf_mapping = collections.defaultdict(list)
     progressbar = tqdm.tqdm(args.files, desc="parsing PDFs", leave=False)
     with multiprocessing.pool.Pool() as pool:
         for pdf_path, pdf_urls in pool.imap(extract_urls_from_pdf, progressbar):
