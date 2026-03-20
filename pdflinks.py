@@ -104,9 +104,13 @@ def main():
     global progressbar
     global warn_on_redirects
 
+    DEFAULT_JOBS = 20
+    jobs_help = f"max # of parallel requests (default {DEFAULT_JOBS})"
+
     parser = argparse.ArgumentParser()
     parser.add_argument("-r", "--warn-on-redirects", action="store_true")
     parser.add_argument("-l", "--only-list-urls", action="store_true")
+    parser.add_argument("-j", "--jobs", type=int, default=DEFAULT_JOBS, help=jobs_help)
     parser.add_argument("files", nargs="+")
     args = parser.parse_args()
 
@@ -138,6 +142,6 @@ def main():
     # inside the worker.
     progressbar = tqdm.tqdm(desc="requests", total=len(url_to_pdf_mapping), leave=False)
     warn_on_redirects = args.warn_on_redirects
-    with multiprocessing.pool.ThreadPool() as pool:
+    with multiprocessing.pool.ThreadPool(args.jobs) as pool:
         pool.map(request_domain_urls, urls_grouped_by_domain)
     progressbar.close()
